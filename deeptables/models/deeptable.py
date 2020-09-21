@@ -311,6 +311,7 @@ class DeepTable:
     @property
     def monitor(self):
         monitor = self.config.monitor_metric
+        print(monitor)
         if monitor is None:
             if self.config.metrics is not None and len(self.config.metrics) > 0:
                 monitor = 'val_' + self.config.first_metric_name
