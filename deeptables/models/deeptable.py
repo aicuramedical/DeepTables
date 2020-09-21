@@ -282,6 +282,7 @@ class DeepTable:
             config = ModelConfig()
         self.config = config
         self.nets = config.nets
+        # this doesn't do anything here:
         self.output_path = self._prepare_output_dir(config.home_dir, config.model_output_name, self.nets)
         self.preprocessor = preprocessor if preprocessor is not None else DefaultPreprocessor(config)
         self.__current_model = None
@@ -356,6 +357,7 @@ class DeepTable:
                             max_queue_size=max_queue_size, workers=workers, use_multiprocessing=use_multiprocessing)
         if self.config.model_output_name is None:
             self.config.model_output_name = f'{"+".join(self.nets)}'
+        self.output_path = self._prepare_output_dir(self.config.home_dir, self.config.model_output_name, self.nets)
         logger.info(f'Training finished.')
         self.__set_model('val', self.config.model_output_name, self.output_path, model, history.history)
         return model, history
