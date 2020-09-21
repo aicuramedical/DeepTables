@@ -599,7 +599,8 @@ class DeepTable:
             if home_dir[-1] == '/':
                 home_dir = home_dir[:-1]
             output_path = os.path.expanduser(f'{home_dir}/')
-
+            print('prepare_output_dir: ')
+            print(output_path)
         if not os.path.exists(output_path):
             os.makedirs(output_path)
         return output_path
