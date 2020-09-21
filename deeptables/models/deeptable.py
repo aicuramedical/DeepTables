@@ -283,7 +283,6 @@ class DeepTable:
         self.config = config
         self.nets = config.nets
         self.output_path = self._prepare_output_dir(config.home_dir, config.model_output_name, self.nets)
-        print(f'printing in __init__: {self.output_path}')
         self.preprocessor = preprocessor if preprocessor is not None else DefaultPreprocessor(config)
         self.__current_model = None
         self.__modelset = modelset.ModelSet(metric=self.config.first_metric_name,
@@ -358,8 +357,6 @@ class DeepTable:
         if self.config.model_output_name is None:
             self.config.model_output_name = f'{"+".join(self.nets)}'
         logger.info(f'Training finished.')
-        print('printing model path')
-        print(self.output_path)
         self.__set_model('val', self.config.model_output_name, self.output_path, model, history.history)
         return model, history
 
@@ -600,8 +597,6 @@ class DeepTable:
             output_path = os.path.expanduser(f'{home_dir}/')
         if not os.path.exists(output_path):
             os.makedirs(output_path)
-        print('prepare_output_dir: ')
-        print(output_path)
         return output_path
 
     def __predict(self, model, X, batch_size=128, verbose=0, auto_transform_data=True, ):
