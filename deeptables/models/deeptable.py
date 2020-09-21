@@ -355,9 +355,10 @@ class DeepTable:
                             callbacks=callbacks, class_weight=class_weight, sample_weight=sample_weight,
                             initial_epoch=initial_epoch, steps_per_epoch=steps_per_epoch,
                             max_queue_size=max_queue_size, workers=workers, use_multiprocessing=use_multiprocessing)
-        name = f'{"+".join(self.nets)}'
+        if self.config.model_output_name is None:
+            self.config.model_output_name = f'{"+".join(self.nets)}'
         logger.info(f'Training finished.')
-        self.__set_model('val', name, model, history.history)
+        self.__set_model('val', self.config.model_output_name, self.output_path, history.history)
         return model, history
 
     def fit_cross_validation(self, X, y, X_eval=None, X_test=None, num_folds=5, stratified=False, iterators=None,
@@ -584,14 +585,18 @@ class DeepTable:
 
         return class_weight
 
-    def _prepare_output_dir(self, home_dir, nets):
+    def _prepare_output_dir(self, home_dir, model_name, nets):
+        if model_name is None:
+            model_name = f'{"_".join(nets)}'
         if home_dir is None:
             home_dir = 'dt_output'
-        if home_dir[-1] == '/':
-            home_dir = home_dir[:-1]
+            running_dir = f'dt_{datetime.datetime.now().__format__("%Y%m%d %H%M%S")}_{model_name}'
+            output_path = os.path.expanduser(f'{home_dir}/{running_dir}/')
+        else:
+            if home_dir[-1] == '/':
+                home_dir = home_dir[:-1]
+            output_path = os.path.expanduser(f'{home_dir}/')
 
-        running_dir = f'dt_{datetime.datetime.now().__format__("%Y%m%d %H%M%S")}_{"_".join(nets)}'
-        output_path = os.path.expanduser(f'{home_dir}/{running_dir}/')
         if not os.path.exists(output_path):
             os.makedirs(output_path)
         return output_path
@@ -602,17 +607,17 @@ class DeepTable:
             X = self.preprocessor.transform_X(X)
         return model.predict(X, batch_size=batch_size, verbose=verbose)
 
-    def __set_model(self, type, name, model, history):
+    def __set_model(self, type, model_name, model_path, model, history):
         self.__modelset.clear()
-        self.__push_model(type, name, model, history)
+        self.__push_model(type, model_name, model_path, model, history)
 
-    def __push_model(self, type, name, model, history, save_model=True):
+    def __push_model(self, type, model_name, model_path, model, history, save_model=True):
         modelfile = ''
         if save_model and isinstance(model, DeepModel):
-            modelfile = f'{self.output_path}{name}.h5'
+            modelfile = f'{model_path}{model_name}.h5'
             model.save(modelfile)
             print(f'Model has been saved to:{modelfile}')
-        mi = modelset.ModelInfo(type, name, model, {}, history=history, modelfile=modelfile)
+        mi = modelset.ModelInfo(type, model_name, model, {}, history=history, modelfile=modelfile)
         self.__modelset.push(mi)
         self.__current_model = mi.name
 
