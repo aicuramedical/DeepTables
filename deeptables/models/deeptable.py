@@ -283,7 +283,7 @@ class DeepTable:
         self.config = config
         self.nets = config.nets
         self.output_path = self._prepare_output_dir(config.home_dir, config.model_output_name, self.nets)
-
+        print(f'printing in __init__: {self.output_path}')
         self.preprocessor = preprocessor if preprocessor is not None else DefaultPreprocessor(config)
         self.__current_model = None
         self.__modelset = modelset.ModelSet(metric=self.config.first_metric_name,
