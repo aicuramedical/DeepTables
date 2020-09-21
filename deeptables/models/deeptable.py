@@ -311,7 +311,6 @@ class DeepTable:
     @property
     def monitor(self):
         monitor = self.config.monitor_metric
-        print(monitor)
         if monitor is None:
             if self.config.metrics is not None and len(self.config.metrics) > 0:
                 monitor = 'val_' + self.config.first_metric_name
@@ -599,10 +598,10 @@ class DeepTable:
             if home_dir[-1] == '/':
                 home_dir = home_dir[:-1]
             output_path = os.path.expanduser(f'{home_dir}/')
-            print('prepare_output_dir: ')
-            print(output_path)
         if not os.path.exists(output_path):
             os.makedirs(output_path)
+        print('prepare_output_dir: ')
+        print(output_path)
         return output_path
 
     def __predict(self, model, X, batch_size=128, verbose=0, auto_transform_data=True, ):
