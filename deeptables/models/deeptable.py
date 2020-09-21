@@ -359,6 +359,8 @@ class DeepTable:
         if self.config.model_output_name is None:
             self.config.model_output_name = f'{"+".join(self.nets)}'
         logger.info(f'Training finished.')
+        print('printing model path')
+        print(self.output_path)
         self.__set_model('val', self.config.model_output_name, self.output_path, model, history.history)
         return model, history
 
