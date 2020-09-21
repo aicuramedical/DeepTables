@@ -358,7 +358,7 @@ class DeepTable:
         if self.config.model_output_name is None:
             self.config.model_output_name = f'{"+".join(self.nets)}'
         logger.info(f'Training finished.')
-        self.__set_model('val', self.config.model_output_name, self.output_path, history.history)
+        self.__set_model('val', self.config.model_output_name, self.output_path, model, history.history)
         return model, history
 
     def fit_cross_validation(self, X, y, X_eval=None, X_test=None, num_folds=5, stratified=False, iterators=None,
@@ -607,9 +607,9 @@ class DeepTable:
             X = self.preprocessor.transform_X(X)
         return model.predict(X, batch_size=batch_size, verbose=verbose)
 
-    def __set_model(self, type, model_name, model_path, history):
+    def __set_model(self, type, model_name, model_path, model, history):
         self.__modelset.clear()
-        self.__push_model(type, model_name, model_path, history)
+        self.__push_model(type, model_name, model_path, model, history)
 
     def __push_model(self, type, model_name, model_path, model, history, save_model=True):
         modelfile = ''
