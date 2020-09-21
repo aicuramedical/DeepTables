@@ -616,6 +616,7 @@ class DeepTable:
         modelfile = ''
         if save_model and isinstance(model, DeepModel):
             modelfile = f'{model_path}{model_name}.h5'
+            print(f'output path is {model_path}')
             model.save(modelfile)
             print(f'Model has been saved to:{modelfile}')
         mi = modelset.ModelInfo(type, model_name, model, {}, history=history, modelfile=modelfile)
