@@ -607,9 +607,9 @@ class DeepTable:
             X = self.preprocessor.transform_X(X)
         return model.predict(X, batch_size=batch_size, verbose=verbose)
 
-    def __set_model(self, type, model_name, model_path, model, history):
+    def __set_model(self, type, model_name, model_path, history):
         self.__modelset.clear()
-        self.__push_model(type, model_name, model_path, model, history)
+        self.__push_model(type, model_name, model_path, history)
 
     def __push_model(self, type, model_name, model_path, model, history, save_model=True):
         modelfile = ''
