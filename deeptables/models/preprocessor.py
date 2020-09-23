@@ -293,8 +293,8 @@ class DefaultPreprocessor(AbstractPreprocessor):
             nunique = X[c].nunique()
             dtype = str(X[c].dtype)
 
-            if nunique <= 1:
-                continue
+            # if nunique <= 1:
+            #     continue
 
             if c in self.config.exclude_columns:
                 excluded_vars.append((c, dtype, nunique))
